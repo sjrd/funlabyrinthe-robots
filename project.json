@@ -1,0 +1,7 @@
+{
+  "modules": [
+    "com.funlabyrinthe.core.AdditionalComponents",
+    "com.funlabyrinthe.mazes.Mazes",
+    "myfunlaby.Robots"
+  ]
+}
