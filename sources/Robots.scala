@@ -103,25 +103,44 @@ abstract class Robot(using ComponentInit) extends PosComponent:
 end Robot
 
 class RobotXThenY(using ComponentInit) extends Robot:
+  var yThenX: Boolean = false
+
   protected def pickMove(map: Map, pos: Position, playerPos: Position): Position =
+    if yThenX then
+      tryMoveY(map, pos, playerPos)
+        .orElse(tryMoveX(map, pos, playerPos))
+        .getOrElse(pos)
+    else
+      tryMoveX(map, pos, playerPos)
+        .orElse(tryMoveY(map, pos, playerPos))
+        .getOrElse(pos)
+  end pickMove
+
+  private def tryMoveX(map: Map, pos: Position, playerPos: Position): Option[Position] =
     if pos.x != playerPos.x then
       val newPos =
         if playerPos.x < pos.x then pos +> Direction.West
         else pos +> Direction.East
       if isFree(newPos) then
-        return newPos
-    end if
+        Some(newPos)
+      else
+        None
+    else
+      None
+  end tryMoveX
 
+  private def tryMoveY(map: Map, pos: Position, playerPos: Position): Option[Position] =
     if pos.y != playerPos.y then
       val newPos =
         if playerPos.y < pos.y then pos +> Direction.North
         else pos +> Direction.South
       if isFree(newPos) then
-        return newPos
-    end if
-
-    pos
-  end pickMove
+        Some(newPos)
+      else
+        None
+    else
+      None
+  end tryMoveY
 end RobotXThenY
 
 def manhattanDist(p1: Position, p2: Position): Int =

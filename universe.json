@@ -152,6 +152,7 @@
         ],
       ],
       "useUnblock": true,
+      "yThenX": true,
     },
     "myfunlaby.Robots:robot24": {
       "editVisualTag": "2.4",
