@@ -9,14 +9,17 @@ object Robots extends Module:
     val player = universe.players.head
     player.enqueueUnderControl { () =>
       val level = player.showSelectNumberMessage(
-        "Choisis un niveau (1-2) :",
+        "Choisis un niveau (1-3) :",
         min = 1,
-        max = 2,
+        max = 3,
         default = 1,
       )
       val mapID = s"map$level"
       val map = universe.findTopComponentByID[Map](AdditionalComponents, mapID)
-      player.reified[Player].position = Some(map.ref(Position(2, 18, 0)))
+      val initialPos = level match
+        case 1 | 2 => Position(2, 18, 0)
+        case 3     => Position(2, 10, 0)
+      player.reified[Player].position = Some(map.ref(initialPos))
     }
   end startGame
 end Robots
@@ -31,6 +34,12 @@ end Robots
 @definition def robot25(using Universe) = new RobotXThenY
 @definition def robot24(using Universe) = new RobotXThenY
 @definition def robot23(using Universe) = new RobotXThenYWithRandomPatrol
+
+@definition def robot37(using Universe) = new RobotXThenYWithRandomPatrol
+@definition def robot36(using Universe) = new RobotXThenYWithPatrol
+@definition def robot35(using Universe) = new RobotXThenY
+@definition def robot34(using Universe) = new RobotXThenYWithSmartPatrol
+@definition def robot33(using Universe) = new RobotXThenYWithPatrol
 
 @definition def randomTransporter(using Universe) = new RandomTransporter
 
@@ -106,6 +115,10 @@ class RobotXThenY(using ComponentInit) extends Robot:
   var yThenX: Boolean = false
 
   protected def pickMove(map: Map, pos: Position, playerPos: Position): Position =
+    tryFollowPlayer(map, pos, playerPos)
+  end pickMove
+
+  protected def tryFollowPlayer(map: Map, pos: Position, playerPos: Position): Position =
     if yThenX then
       tryMoveY(map, pos, playerPos)
         .orElse(tryMoveX(map, pos, playerPos))
@@ -114,7 +127,7 @@ class RobotXThenY(using ComponentInit) extends Robot:
       tryMoveX(map, pos, playerPos)
         .orElse(tryMoveY(map, pos, playerPos))
         .getOrElse(pos)
-  end pickMove
+  end tryFollowPlayer
 
   private def tryMoveX(map: Map, pos: Position, playerPos: Position): Option[Position] =
     if pos.x != playerPos.x then
@@ -150,28 +163,44 @@ def manhattanDist(p1: Position, p2: Position): Int =
 class RobotXThenYWithPatrol(using ComponentInit) extends RobotXThenY:
   var maxPursuitDistance: Int = 4
   var direction: Direction = Direction.North
+  var directions: List[Direction] = Nil
 
   override protected def pickMove(map: Map, pos: Position, playerPos: Position): Position =
     if manhattanDist(pos, playerPos) <= maxPursuitDistance then
-      super.pickMove(map, pos, playerPos)
+      tryFollowPlayer(map, pos, playerPos)
     else
-      // Patrol
-      val newPos = pos +> direction
-      if isFree(newPos) then
-        newPos
-      else
-        // Turn around
-        direction = direction.opposite
-        pos +> direction
+      patrol(map, pos, playerPos)
   end pickMove
+
+  protected def patrol(map: Map, pos: Position, playerPos: Position): Position =
+    val newPos = pos +> direction
+    if isFree(newPos) then
+      newPos
+    else
+      // Choose new direction
+      direction = directions.indexOf(direction) match
+        case -1  => direction.opposite // turn around
+        case idx => directions((idx + 1) % directions.size) // cycle
+      pos +> direction
+  end patrol
 end RobotXThenYWithPatrol
 
 class RobotXThenYWithRandomPatrol(using ComponentInit) extends RobotXThenYWithPatrol:
-  override protected def pickMove(map: Map, pos: Position, playerPos: Position): Position =
-    direction = Direction.values(scala.util.Random.nextInt(Direction.values.length))
-    super.pickMove(map, pos, playerPos)
-  end pickMove
+  override protected def patrol(map: Map, pos: Position, playerPos: Position): Position =
+    pos +> Direction.values(scala.util.Random.nextInt(Direction.values.length))
 end RobotXThenYWithRandomPatrol
+
+class RobotXThenYWithSmartPatrol(using ComponentInit) extends RobotXThenYWithPatrol:
+  override protected def patrol(map: Map, pos: Position, playerPos: Position): Position =
+    if pos.x > 3 || pos.y < 4 || pos.y > 16 then
+      tryFollowPlayer(map, pos, playerPos)
+    else
+      if pos.y < 10 then
+        pos +> Direction.North
+      else
+        pos +> Direction.South
+  end patrol
+end RobotXThenYWithSmartPatrol
 
 class RandomTransporter(using ComponentInit) extends Effect:
   category = ComponentCategory("transporters", "Transporters")

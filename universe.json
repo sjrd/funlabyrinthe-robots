@@ -3,6 +3,7 @@
   "additionalComponents": {
     "map1": "com.funlabyrinthe.mazes.Map",
     "map2": "com.funlabyrinthe.mazes.Map",
+    "map3": "com.funlabyrinthe.mazes.Map",
     "mapLevelChoice": "com.funlabyrinthe.mazes.Map",
   },
   "components": {
@@ -60,6 +61,51 @@
       "zoneHeight": 21,
     },
     "com.funlabyrinthe.core.AdditionalComponents:map2": {
+      "map": {
+        "dimensions": [ 21, 21, 1, ],
+        "palette": [
+          [ "com.funlabyrinthe.mazes.Mazes:wall", "com.funlabyrinthe.mazes.Mazes:noEffect", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:noEffect", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:northArrow", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:directTurnstile", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:indirectTurnstile", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "myfunlaby.Robots:randomTransporter", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:westArrow", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:eastArrow", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:southArrow", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:outside", "com.funlabyrinthe.mazes.Mazes:noEffect", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+        ],
+        "map": [
+          [
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 2, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 3, 1, 1, 4, 1, 5, 1, 3, 1, 1, 4, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 2, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 4, 1, 1, 5, 1, 5, 1, 5, 1, 1, 3, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 6, 5, 1, 6, 5, 1, 1, 1, 5, 7, 1, 5, 6, 1, 1, 1, 1, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 3, 1, 1, 5, 1, 5, 1, 5, 1, 1, 4, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 8, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 4, 1, 1, 3, 1, 5, 1, 4, 1, 1, 3, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 8, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+          ],
+        ],
+        "outside": [ 9, ],
+      },
+      "zoneWidth": 21,
+      "zoneHeight": 21,
+    },
+    "com.funlabyrinthe.core.AdditionalComponents:map3": {
       "map": {
         "dimensions": [ 21, 21, 1, ],
         "palette": [
@@ -191,6 +237,57 @@
           [ 20, 10, 0, ],
         ],
       ],
+    },
+    "myfunlaby.Robots:robot33": {
+      "editVisualTag": "3.3",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map3",
+          [ 18, 1, 0, ],
+        ],
+      ],
+      "yThenX": true,
+      "direction": "South",
+      "directions": [ "South", "West", "North", "East", ],
+    },
+    "myfunlaby.Robots:robot34": {
+      "editVisualTag": "3.4",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map3",
+          [ 20, 10, 0, ],
+        ],
+      ],
+      "useUnblock": true,
+    },
+    "myfunlaby.Robots:robot35": {
+      "editVisualTag": "3.5",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map3",
+          [ 10, 10, 0, ],
+        ],
+      ],
+    },
+    "myfunlaby.Robots:robot36": {
+      "editVisualTag": "3.6",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map3",
+          [ 19, 19, 0, ],
+        ],
+      ],
+      "directions": [ "North", "West", "South", "East", ],
+    },
+    "myfunlaby.Robots:robot37": {
+      "editVisualTag": "3.7",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map3",
+          [ 17, 10, 0, ],
+        ],
+      ],
+      "yThenX": true,
     },
     "myfunlaby.Robots:robot4": {
       "editVisualTag": "1.4",
