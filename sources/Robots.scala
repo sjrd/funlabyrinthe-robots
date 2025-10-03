@@ -4,12 +4,33 @@ import com.funlabyrinthe.core.*
 import com.funlabyrinthe.mazes.*
 import com.funlabyrinthe.mazes.std.*
 
-object Robots extends Module
+object Robots extends Module:
+  override protected def startGame()(using universe: Universe): Unit =
+    val player = universe.players.head
+    player.enqueueUnderControl { () =>
+      val level = player.showSelectNumberMessage(
+        "Choisis un niveau (1-2) :",
+        min = 1,
+        max = 2,
+        default = 1,
+      )
+      val mapID = s"map$level"
+      val map = universe.findTopComponentByID[Map](AdditionalComponents, mapID)
+      player.reified[Player].position = Some(map.ref(Position(2, 18, 0)))
+    }
+  end startGame
+end Robots
 
 @definition def robotHandlerPlugin(using Universe) = new RobotHandlerPlugin
+
 @definition def robot5(using Universe) = new RobotXThenY
 @definition def robot4(using Universe) = new RobotXThenY
 @definition def robot3(using Universe) = new RobotXThenY
+
+@definition def robot26(using Universe) = new RobotXThenYWithPatrol
+@definition def robot25(using Universe) = new RobotXThenY
+@definition def robot24(using Universe) = new RobotXThenY
+@definition def robot23(using Universe) = new RobotXThenYWithRandomPatrol
 
 @definition def randomTransporter(using Universe) = new RandomTransporter
 
@@ -18,7 +39,7 @@ class RobotHandlerPlugin(using ComponentInit) extends PlayerPlugin:
     import context.*
     if pos() == (grass: Square) then
       for robot <- universe.components[Robot] do
-        if robot.position.exists(_.map == pos.map) && player.playState == CorePlayer.PlayState.Playing then
+        if robot.position.exists(_.map == pos.map) && player.isPlaying then
           robot.move(player)
   end moved
 end RobotHandlerPlugin
@@ -30,9 +51,11 @@ abstract class Robot(using ComponentInit) extends PosComponent:
   zIndex = 512 // below the player
   editVisualTag = id.reverse.takeWhile(c => c >= '0' && c <= '9').reverse
 
+  var useUnblock: Boolean = false
+
   override protected def hookExecute(context: MoveContext): Unit =
     import context.*
-    if player.playState == CorePlayer.PlayState.Playing then // TODO This shouldn't be needed, should it?
+    if player.isPlaying then // TODO This shouldn't be needed, should it?
       player.lose()
       player.showMessage("Tu t'es jeté dans la gueule du loup !")
   end hookExecute
@@ -41,13 +64,27 @@ abstract class Robot(using ComponentInit) extends PosComponent:
     val map = position.get.map
     val pos = position.get.pos
     val playerPos = player.position.get.pos
-    val newPos = pickMove(map, pos, playerPos)
+
+    val newPos =
+      if useUnblock then
+        tryUnblock(map, pos).getOrElse(pickMove(map, pos, playerPos))
+      else
+        pickMove(map, pos, playerPos)
+
     if newPos != pos && isFree(newPos) then
       position = Some(map.ref(newPos))
       if newPos == playerPos then
         player.lose()
         player.showMessage("Tu t'es fait avoir par le robot !")
   end move
+
+  private def tryUnblock(map: Map, pos: Position): Option[Position] =
+    val possibleMoves = Direction.values.toList.map(pos +> _).filter(isFree(_))
+    if possibleMoves.sizeIs == 1 then
+      Some(possibleMoves.head)
+    else
+      None
+  end tryUnblock
 
   protected def pickMove(map: Map, pos: Position, playerPos: Position): Position
 
@@ -66,27 +103,6 @@ abstract class Robot(using ComponentInit) extends PosComponent:
 end Robot
 
 class RobotXThenY(using ComponentInit) extends Robot:
-  /* #Robot5
-   * Remplacer &Variable_1 Variable_5
-   * Remplacer &Variable_2 Variable_15
-   * Si Variable_1 = X Alors [Saute BonX5]
-   * Si Variable_1 > X Alors [Decrementer &Variable_1] Sinon [Incrementer &Variable_1]
-   * Si [Case Variable_1 Variable_2 1] = [#] Alors [Saute BonY5]
-   * #BonX5
-   * Remplacer &Variable_1 Variable_5
-   * Si Variable_2 = Y Alors [Saute BonY5]
-   * Si Variable_2 < Y Alors [Incrementer &Variable_2] Sinon [Decrementer &Variable_2]
-   * #BonY5
-   * Si [Case Variable_1 Variable_2 1] <> [#] Alors [Saute Robot4]
-   * Remplacer Case Variable_5 Variable_15 1 #
-   * Remplacer Case Variable_1 Variable_2 1 !
-   * Remplacer &Variable_5 Variable_1
-   * Remplacer &Variable_15 Variable_2
-   * Si Variable_5 <> X Ou Variable_15 <> Y Alors [Saute Robot4]
-   * Echec {Tu t'es fait avoir par le robot !}
-   * Gagner
-   * Stop
-   */
   protected def pickMove(map: Map, pos: Position, playerPos: Position): Position =
     if pos.x != playerPos.x then
       val newPos =
@@ -107,6 +123,36 @@ class RobotXThenY(using ComponentInit) extends Robot:
     pos
   end pickMove
 end RobotXThenY
+
+def manhattanDist(p1: Position, p2: Position): Int =
+  val diff = p1 - p2
+  diff.x.abs + diff.y.abs + diff.z.abs
+
+class RobotXThenYWithPatrol(using ComponentInit) extends RobotXThenY:
+  var maxPursuitDistance: Int = 4
+  var direction: Direction = Direction.North
+
+  override protected def pickMove(map: Map, pos: Position, playerPos: Position): Position =
+    if manhattanDist(pos, playerPos) <= maxPursuitDistance then
+      super.pickMove(map, pos, playerPos)
+    else
+      // Patrol
+      val newPos = pos +> direction
+      if isFree(newPos) then
+        newPos
+      else
+        // Turn around
+        direction = direction.opposite
+        pos +> direction
+  end pickMove
+end RobotXThenYWithPatrol
+
+class RobotXThenYWithRandomPatrol(using ComponentInit) extends RobotXThenYWithPatrol:
+  override protected def pickMove(map: Map, pos: Position, playerPos: Position): Position =
+    direction = Direction.values(scala.util.Random.nextInt(Direction.values.length))
+    super.pickMove(map, pos, playerPos)
+  end pickMove
+end RobotXThenYWithRandomPatrol
 
 class RandomTransporter(using ComponentInit) extends Effect:
   category = ComponentCategory("transporters", "Transporters")
