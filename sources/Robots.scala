@@ -9,16 +9,16 @@ object Robots extends Module:
     val player = universe.players.head
     player.enqueueUnderControl { () =>
       val level = player.showSelectNumberMessage(
-        "Choisis un niveau (1-3) :",
+        "Choisis un niveau (1-4) :",
         min = 1,
-        max = 3,
+        max = 4,
         default = 1,
       )
       val mapID = s"map$level"
       val map = universe.findTopComponentByID[Map](AdditionalComponents, mapID)
       val initialPos = level match
         case 1 | 2 => Position(2, 18, 0)
-        case 3     => Position(2, 10, 0)
+        case 3 | 4 => Position(2, 10, 0)
       player.reified[Player].position = Some(map.ref(initialPos))
     }
   end startGame
@@ -41,7 +41,15 @@ end Robots
 @definition def robot34(using Universe) = new RobotXThenYWithSmartPatrol
 @definition def robot33(using Universe) = new RobotXThenYWithPatrol
 
+@definition def robot47(using Universe) = new RobotXThenYWithRandomPatrol
+@definition def robot46(using Universe) = new RobotXThenY
+@definition def robot45(using Universe) = new RobotXThenY
+@definition def robot44(using Universe) = new RobotXThenY
+@definition def robot43(using Universe) = new RobotXThenYWithGuardPatrol
+
 @definition def randomTransporter(using Universe) = new RandomTransporter
+
+@definition def rockCreator(using Universe) = new RockCreator
 
 class RobotHandlerPlugin(using ComponentInit) extends PlayerPlugin:
   override def moved(context: MoveContext): Unit =
@@ -61,6 +69,12 @@ abstract class Robot(using ComponentInit) extends PosComponent:
   editVisualTag = id.reverse.takeWhile(c => c >= '0' && c <= '9').reverse
 
   var useUnblock: Boolean = false
+  var avoidCenter: Boolean = false
+
+  var minX = 0
+  var maxX = 21
+  var minY = 0
+  var maxY = 21
 
   override protected def hookExecute(context: MoveContext): Unit =
     import context.*
@@ -80,11 +94,12 @@ abstract class Robot(using ComponentInit) extends PosComponent:
       else
         pickMove(map, pos, playerPos)
 
-    if newPos != pos && isFree(newPos) then
-      position = Some(map.ref(newPos))
-      if newPos == playerPos then
-        player.lose()
-        player.showMessage("Tu t'es fait avoir par le robot !")
+    if newPos != pos && isFree(newPos) && (minX to maxX).contains(newPos.x) && (minY to maxY).contains(newPos.y) then
+      if !(avoidCenter && newPos.x >= 4 && newPos.x <= 16 && newPos.y >= 4 && newPos.y <= 16) then
+        position = Some(map.ref(newPos))
+        if newPos == playerPos then
+          player.lose()
+          player.showMessage("Tu t'es fait avoir par le robot !")
   end move
 
   private def tryUnblock(map: Map, pos: Position): Option[Position] =
@@ -103,12 +118,6 @@ abstract class Robot(using ComponentInit) extends PosComponent:
     square == (grass: Square)
       && !map.posComponentsBottomUp(pos).exists(!_.isInstanceOf[Player])
   end isFree
-
-  /*protected def attempts(newPosAttempts: (() => Position)*): Position =
-    newPosAttempts.iterator
-      .map(_())
-      .find(isFree(_))
-      .getOrElse(position.get.pos)*/
 end Robot
 
 class RobotXThenY(using ComponentInit) extends Robot:
@@ -202,6 +211,29 @@ class RobotXThenYWithSmartPatrol(using ComponentInit) extends RobotXThenYWithPat
   end patrol
 end RobotXThenYWithSmartPatrol
 
+class RobotXThenYWithGuardPatrol(using ComponentInit) extends RobotXThenYWithPatrol:
+  override protected def patrol(map: Map, pos: Position, playerPos: Position): Position =
+    if pos.x >= 17 then
+      // On the right; go to vertical center
+      if pos.y < 10 then
+        pos +> Direction.South
+      else if pos.y > 10 then
+        pos +> Direction.North
+      else
+        pos
+    else
+      if pos.x < 4 && pos.y >= 4 && pos.y <= 16 then
+        // On the inner left; go to vertical exterior
+        if pos.y > 10 then
+          pos +> Direction.South
+        else
+          pos +> Direction.North
+      else
+        // On top or bottom; go right
+        pos +> Direction.East
+  end patrol
+end RobotXThenYWithGuardPatrol
+
 class RandomTransporter(using ComponentInit) extends Effect:
   category = ComponentCategory("transporters", "Transporters")
 
@@ -215,3 +247,26 @@ class RandomTransporter(using ComponentInit) extends Effect:
     goOnMoving = true
   end execute
 end RandomTransporter
+
+final class RockCreator(using ComponentInit) extends ComponentCreator[Rock]:
+  category = ComponentCategory("rocks", "Rocks")
+
+  icon += "Rocks/BigRock"
+  icon += "Creators/Creator"
+end RockCreator
+
+class Rock(using ComponentInit) extends PosComponent:
+  category = ComponentCategory("rocks", "Rocks")
+
+  painter += "Rocks/BigRock"
+
+  override protected def hookPushing(context: MoveContext): Unit =
+    import context.*
+
+    val behind = pos +> player.direction.get
+    if keyEvent.isEmpty || behind() != grass.toSquare || behind.map.posComponentsBottomUp(behind.pos).nonEmpty then
+      cancel()
+    else
+      position = Some(behind)
+  end hookPushing
+end Rock
