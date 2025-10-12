@@ -9,16 +9,16 @@ object Robots extends Module:
     val player = universe.players.head
     player.enqueueUnderControl { () =>
       val level = player.showSelectNumberMessage(
-        "Choisis un niveau (1-4) :",
+        "Choisis un niveau (1-5) :",
         min = 1,
-        max = 4,
+        max = 5,
         default = 1,
       )
       val mapID = s"map$level"
       val map = universe.findTopComponentByID[Map](AdditionalComponents, mapID)
       val initialPos = level match
-        case 1 | 2 => Position(2, 18, 0)
-        case 3 | 4 => Position(2, 10, 0)
+        case 1 | 2     => Position(2, 18, 0)
+        case 3 | 4 | 5 => Position(2, 10, 0)
       player.reified[Player].position = Some(map.ref(initialPos))
     }
   end startGame
@@ -46,6 +46,13 @@ end Robots
 @definition def robot45(using Universe) = new RobotXThenY
 @definition def robot44(using Universe) = new RobotXThenY
 @definition def robot43(using Universe) = new RobotXThenYWithGuardPatrol
+
+@definition def robot58(using Universe) = new RobotXThenYWithGuardPatrol
+@definition def robot57(using Universe) = new RobotXThenYWithRandomPatrol
+@definition def robot56(using Universe) = new RobotXThenY
+@definition def robot55(using Universe) = new RobotXThenY
+@definition def robot54(using Universe) = new RobotXThenY
+@definition def robot53(using Universe) = new RobotXThenYWithGuardPatrol
 
 @definition def randomTransporter(using Universe) = new RandomTransporter
 

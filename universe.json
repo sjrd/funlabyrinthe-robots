@@ -5,12 +5,18 @@
     "map2": "com.funlabyrinthe.mazes.Map",
     "map3": "com.funlabyrinthe.mazes.Map",
     "map4": "com.funlabyrinthe.mazes.Map",
+    "map5": "com.funlabyrinthe.mazes.Map",
     "mapLevelChoice": "com.funlabyrinthe.mazes.Map",
     "rock41": "myfunlaby.Rock",
     "rock42": "myfunlaby.Rock",
     "rock43": "myfunlaby.Rock",
     "rock44": "myfunlaby.Rock",
     "rock45": "myfunlaby.Rock",
+    "rock51": "myfunlaby.Rock",
+    "rock52": "myfunlaby.Rock",
+    "rock53": "myfunlaby.Rock",
+    "rock54": "myfunlaby.Rock",
+    "rock55": "myfunlaby.Rock",
   },
   "components": {
     "com.funlabyrinthe.core.Core:player:com.funlabyrinthe.mazes.Player": {
@@ -157,6 +163,46 @@
       "zoneHeight": 21,
     },
     "com.funlabyrinthe.core.AdditionalComponents:map4": {
+      "map": {
+        "dimensions": [ 21, 21, 1, ],
+        "palette": [
+          [ "com.funlabyrinthe.mazes.Mazes:wall", "com.funlabyrinthe.mazes.Mazes:noEffect", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:noEffect", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:directTurnstile", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:grass", "com.funlabyrinthe.mazes.Mazes:indirectTurnstile", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+          [ "com.funlabyrinthe.mazes.Mazes:outside", "com.funlabyrinthe.mazes.Mazes:noEffect", "com.funlabyrinthe.mazes.Mazes:noTool", "com.funlabyrinthe.mazes.Mazes:noObstacle", ],
+        ],
+        "map": [
+          [
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 2, 1, 1, 3, 1, 1, 1, 2, 1, 1, 3, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, ],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+          ],
+        ],
+        "outside": [ 4, ],
+      },
+      "zoneWidth": 21,
+      "zoneHeight": 21,
+    },
+    "com.funlabyrinthe.core.AdditionalComponents:map5": {
       "map": {
         "dimensions": [ 21, 21, 1, ],
         "palette": [
@@ -407,6 +453,71 @@
         ],
       ],
     },
+    "myfunlaby.Robots:robot53": {
+      "editVisualTag": "5.3",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 18, 1, 0, ],
+        ],
+      ],
+      "avoidCenter": true,
+      "maxPursuitDistance": 5,
+    },
+    "myfunlaby.Robots:robot54": {
+      "editVisualTag": "5.4",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 20, 10, 0, ],
+        ],
+      ],
+    },
+    "myfunlaby.Robots:robot55": {
+      "editVisualTag": "5.5",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 10, 10, 0, ],
+        ],
+      ],
+    },
+    "myfunlaby.Robots:robot56": {
+      "editVisualTag": "5.6",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 19, 19, 0, ],
+        ],
+      ],
+      "yThenX": true,
+    },
+    "myfunlaby.Robots:robot57": {
+      "editVisualTag": "5.7",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 12, 10, 0, ],
+        ],
+      ],
+      "minX": 5,
+      "maxX": 15,
+      "minY": 5,
+      "maxY": 15,
+      "yThenX": true,
+    },
+    "myfunlaby.Robots:robot58": {
+      "editVisualTag": "5.8",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 2, 2, 0, ],
+        ],
+      ],
+      "avoidCenter": true,
+      "yThenX": true,
+      "maxPursuitDistance": 5,
+    },
     "com.funlabyrinthe.core.AdditionalComponents:rock41": {
       "editVisualTag": "4.1",
       "position": [
@@ -448,6 +559,51 @@
       "position": [
         [
           "com.funlabyrinthe.core.AdditionalComponents:map4",
+          [ 16, 10, 0, ],
+        ],
+      ],
+    },
+    "com.funlabyrinthe.core.AdditionalComponents:rock51": {
+      "editVisualTag": "5.1",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 8, 8, 0, ],
+        ],
+      ],
+    },
+    "com.funlabyrinthe.core.AdditionalComponents:rock52": {
+      "editVisualTag": "5.2",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 12, 8, 0, ],
+        ],
+      ],
+    },
+    "com.funlabyrinthe.core.AdditionalComponents:rock53": {
+      "editVisualTag": "5.3",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 8, 12, 0, ],
+        ],
+      ],
+    },
+    "com.funlabyrinthe.core.AdditionalComponents:rock54": {
+      "editVisualTag": "5.4",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
+          [ 12, 12, 0, ],
+        ],
+      ],
+    },
+    "com.funlabyrinthe.core.AdditionalComponents:rock55": {
+      "editVisualTag": "5.5",
+      "position": [
+        [
+          "com.funlabyrinthe.core.AdditionalComponents:map5",
           [ 16, 10, 0, ],
         ],
       ],
