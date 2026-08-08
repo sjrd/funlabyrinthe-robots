@@ -56,7 +56,7 @@ end Robots
 
 @definition def randomTransporter(using Universe) = new RandomTransporter
 
-@definition def rockCreator(using Universe) = new RockCreator
+@definition def rockTemplate(using Universe) = new Rock().asTemplate()
 
 class RobotHandlerPlugin(using ComponentInit) extends PlayerPlugin:
   override def moved(context: MoveContext): Unit =
@@ -254,13 +254,6 @@ class RandomTransporter(using ComponentInit) extends Effect:
     goOnMoving = true
   end execute
 end RandomTransporter
-
-final class RockCreator(using ComponentInit) extends ComponentCreator[Rock]:
-  category = ComponentCategory("rocks", "Rocks")
-
-  icon += "Rocks/BigRock"
-  icon += "Creators/Creator"
-end RockCreator
 
 class Rock(using ComponentInit) extends PosComponent:
   category = ComponentCategory("rocks", "Rocks")
