@@ -56,8 +56,6 @@ end Robots
 
 @definition def randomTransporter(using Universe) = new RandomTransporter
 
-@definition def rockTemplate(using Universe) = new Rock().asTemplate()
-
 class RobotHandlerPlugin(using ComponentInit) extends PlayerPlugin:
   override def moved(context: MoveContext): Unit =
     import context.*
@@ -254,19 +252,3 @@ class RandomTransporter(using ComponentInit) extends Effect:
     goOnMoving = true
   end execute
 end RandomTransporter
-
-class Rock(using ComponentInit) extends PosComponent:
-  category = ComponentCategory("rocks", "Rocks")
-
-  painter += "Rocks/BigRock"
-
-  override protected def hookPushing(context: MoveContext): Unit =
-    import context.*
-
-    val behind = pos +> player.direction.get
-    if keyEvent.isEmpty || behind() != grass.toSquare || behind.map.posComponentsBottomUp(behind.pos).nonEmpty then
-      cancel()
-    else
-      position = Some(behind)
-  end hookPushing
-end Rock

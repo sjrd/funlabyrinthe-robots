@@ -1,7 +1,11 @@
 {
+  "dependencies": [
+    "funlaby:sjrd/movableblocks/local-current"
+  ],
   "modules": [
     "com.funlabyrinthe.core.AdditionalComponents",
     "com.funlabyrinthe.mazes.Mazes",
+    "user.sjrd.movableblocks.MovableBlocks",
     "myfunlaby.Robots"
   ]
 }
