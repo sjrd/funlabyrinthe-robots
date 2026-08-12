@@ -57,13 +57,13 @@ end Robots
 @definition def randomTransporter(using Universe) = new RandomTransporter
 
 class RobotHandlerPlugin(using ComponentInit) extends PlayerPlugin:
-  override def moved(context: MoveContext): Unit =
+  override def entered(context: EnteredContext): Unit = {
     import context.*
     if pos() == (grass: Square) then
       for robot <- universe.components[Robot] do
         if robot.position.exists(_.map == pos.map) && player.isPlaying then
           robot.move(player)
-  end moved
+  }
 end RobotHandlerPlugin
 
 abstract class Robot(using ComponentInit) extends PosComponent:
@@ -81,7 +81,7 @@ abstract class Robot(using ComponentInit) extends PosComponent:
   var minY = 0
   var maxY = 21
 
-  override protected def hookExecute(context: MoveContext): Unit =
+  override protected def hookExecute(context: ExecuteContext): Unit =
     import context.*
     if player.isPlaying then // TODO This shouldn't be needed, should it?
       player.lose()
@@ -245,10 +245,10 @@ class RandomTransporter(using ComponentInit) extends Effect:
   painter += "Transporters/Transporter"
   editVisualTag = "✥"
 
-  override def execute(context: MoveContext): Unit =
+  override def execute(context: ExecuteContext): Unit =
     import context.*
 
-    player.direction = Some(Direction.values(scala.util.Random.nextInt(4)))
+    player.direction = Direction.values(scala.util.Random.nextInt(4))
     goOnMoving = true
   end execute
 end RandomTransporter
